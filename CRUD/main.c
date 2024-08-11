@@ -6,13 +6,22 @@ int main(){
 
     int opt = 0;
 
-    printf("1.- CREATE\n2.- READ");
+    printf("1.- CREATE\n2.- READ\n3.- UPDATE\n4.- DELETE");
     printf("\nEnter option: ");
     scanf("%d", &opt);
-    if(opt == 1){
-        create(con);
-    }else{
-        read_data(con);
+    switch (opt){
+        case 1:
+            create(con);
+        break;
+        case 2:
+            read_data(con);
+        break;
+        case 3:
+            update(con);
+        break;
+        default:
+            printf("\nEnter a valid option.\n");
+        break;
     }
 
     closeConnection(con);

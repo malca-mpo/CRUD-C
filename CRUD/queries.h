@@ -15,6 +15,7 @@ MYSQL* connection();
 void closeConnection(MYSQL* con);
 void create(MYSQL* con);
 void read_data(MYSQL* con);
+void update(MYSQL* con);
 
 
 #endif

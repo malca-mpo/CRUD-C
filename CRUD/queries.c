@@ -55,11 +55,53 @@ void read_data(MYSQL* con){
 
     MYSQL_ROW row;
 
+    printf("\n");
     while((row = mysql_fetch_row(res))){
         for(int i = 0; i < num_fields; i++){
             printf("%s ", row[i] ? row[i] : "NULL");
         }
         printf("\n");
     }
+}
+
+void update(MYSQL* con){
+
+  int id;
+  char query[MAX_QUERY];
+  char name[MAX_STRING], lastname[MAX_STRING];
+    printf("\nEnter user id: ");
+    scanf("%d", &id);
+    snprintf(query, sizeof(query),"SELECT COUNT(*) FROM CRUD.USER WHERE ID=%d", id);
+
+    if(mysql_query(con, query)){
+        fprintf(stderr, "MYSQL: %s", mysql_error(con));
+    }
+
+    MYSQL_RES* res = mysql_store_result(con);
+    if(!res){
+      fprintf(stderr, "MYSQL: %s", mysql_error(con));
+    }
+    MYSQL_ROW row = mysql_fetch_row(res);
+    int count = atoi(row[0]);
+
+    if(count == 0){
+      printf("\nThe entered id does not exist.\n");
+      return;
+    }
+
+    printf("\nEnter the new name: ");
+    scanf(" %[^\n]", name);
+    printf("\nEnter the new lastname: ");
+    scanf(" %[^\n]", lastname);
+
+    snprintf(query, sizeof(query),"UPDATE CRUD.USER SET NAME='%s', LASTNAME='%s' WHERE ID=%d", name, lastname, id);
+
+    if(mysql_query(con, query)){
+      fprintf(stderr ,"\nMY SQL: %s\n", mysql_error(con));
+    }
+
+    printf("\nUSER UPDATE SUCCESFULLY.\n");
+
+    mysql_free_result(res);
 
 }
