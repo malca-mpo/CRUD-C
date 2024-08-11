@@ -105,3 +105,38 @@ void update(MYSQL* con){
     mysql_free_result(res);
 
 }
+
+void delete(MYSQL* con){
+    int id;
+    char query[MAX_QUERY];
+
+    printf("\nEnter user id: ");
+    scanf("%d", &id);
+    snprintf(query, sizeof(query),"SELECT COUNT(*) FROM CRUD.USER WHERE ID=%d", id);
+
+    if(mysql_query(con, query)){
+        fprintf(stderr, "MYSQL: %s", mysql_error(con));
+    }
+
+    MYSQL_RES* res = mysql_store_result(con);
+    if(!res){
+      fprintf(stderr, "MYSQL: %s", mysql_error(con));
+    }
+    MYSQL_ROW row = mysql_fetch_row(res);
+    int count = atoi(row[0]);
+
+    if(count == 0){
+      printf("\nThe entered id does not exist.\n");
+      return;
+    }
+
+    snprintf(query, sizeof(query), "DELETE FROM CRUD.USER WHERE ID=%d", id);
+
+    if(mysql_query(con, query)){
+     fprintf(stderr, "MY SQL: %s", mysql_error(con));
+    }  
+
+     printf("\nUSER DELETED SUCCESFULLY.\n");
+
+    mysql_free_result(res); 
+}
