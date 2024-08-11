@@ -43,12 +43,12 @@ void create(MYSQL* con){
 void read_data(MYSQL* con){
 
     if(mysql_query(con, "SELECT * FROM CRUD.USER")){
-      printf("\nError jaskdas\n");
+      printf("\nError with query!\n");
     }
 
     MYSQL_RES* res = mysql_store_result(con);
     if(!res){
-      printf("\nERROR PUTITO\n");
+      printf("\nError storing result!\n");
     }
 
     int num_fields = mysql_num_fields(res);
