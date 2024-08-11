@@ -1,2 +1,6 @@
 config.h
 main
+.vscode
+main.o
+queries.o
+makefile

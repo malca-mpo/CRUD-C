@@ -1,20 +1,22 @@
-#include "main.h"
+#include "queries.h"
 
 MYSQL* connection(){
     MYSQL* con = mysql_init(NULL);
     if(!con){
       fprintf(stderr, "%s\n", mysql_error(con));
-      mysql_close(con);
       return NULL;
     }
 
-    if(!mysql_real_connect(con, HOST, USER, PASSWORD, NAME, PORT, NULL, CLIENT_MULTI_STATEMENTS)){
+    if(!mysql_real_connect(con, HOST, USER, PASSWORD, NAME, PORT, NULL, 0)){
       fprintf(stderr, "%s\n", mysql_error(con));
-      mysql_close(con);
       return NULL;
     }
 
     return con;
+}
+
+void closeConnection(MYSQL* con){
+    mysql_close(con);
 }
 
 void create(MYSQL* con){
@@ -31,10 +33,33 @@ void create(MYSQL* con){
 
     if(mysql_query(con, query)){
       printf("\nOops!, something went wrong when inserting the data into database!\n");
-      mysql_close(con);
       return;
     }else{
       printf("\nData enter into database succesfully!\n");
+    }
+
+}
+
+void read_data(MYSQL* con){
+
+    if(mysql_query(con, "SELECT * FROM CRUD.USER")){
+      printf("\nError jaskdas\n");
+    }
+
+    MYSQL_RES* res = mysql_store_result(con);
+    if(!res){
+      printf("\nERROR PUTITO\n");
+    }
+
+    int num_fields = mysql_num_fields(res);
+
+    MYSQL_ROW row;
+
+    while((row = mysql_fetch_row(res))){
+        for(int i = 0; i < num_fields; i++){
+            printf("%s ", row[i] ? row[i] : "NULL");
+        }
+        printf("\n");
     }
 
 }
